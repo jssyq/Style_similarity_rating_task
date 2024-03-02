@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Fashion Style Similarity Rating Task
+        </title>
+        <script src="https://unpkg.com/jspsych@7.3.4"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-free-sort@1.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
+        <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body></body>
+
+    <script>
+        var jsPsych = initJsPsych({
+            on_finish: function () {
+				jsPsych.data.displayData();
+			},
+        });
+
+        var timeline = [];
+
+        var welcome_page = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus:`
+            <p>Welcome and thank you for participating in this study!</p>
+            <p></p>
+            <p>Press any key to continue.</p>
+            `
+        }
+
+        var instruction = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+            <p>In this study, you will be asked to compare the styles of some outfits from the Spring/Summer 2024 Runway Shows.</p>
+            <p>Namely, how similar or how dissimilar they are to you.</p>
+            <p></p>
+            <p>All of the outfits are womenswear, coming from a variety of brands.</p>
+            <p></p>
+            <p>Before we start, let's answer some background questions. Press any key to continue.</p>
+            `
+        }
+
+        var background_questions = {
+            type: jsPsychSurveyLikert,
+            questions:[
+                {
+                    prompt: "Is your career related to fashion?",
+                    required: true,
+                    name: 'bg_question_1',
+                    labels: ["yes", "no"]
+                },
+                {
+                    prompt: "How often do you follow developments in women's fashion? ",
+                    required: true,
+                    name: 'bg_question_2', 
+                    labels: [
+                        "Rarely or Never", "Occasionally", "Sometimes", "Often", "Always"
+                    ]
+                },
+                {
+                    prompt: "Do you actively try to style yourself when it comes to your personal fashion choices?",
+                    required: true,
+                    names: 'bg_questions_3',
+                    labels:[
+                        "Never", "Rarely", "Sometimes", "Often", "Always"
+                    ]
+                }
+            ]
+        }
+
+        var preload = {
+            type: jsPsychPreload,
+            images: [
+                "test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png",
+                "test/img7.png", "test/img8.png",
+                "stimuli/acne-1.png", "stimuli/acne-2.png", "stimuli/alberta-1.png", "stimuli/alberta-2.png",
+                "stimuli/balmain-1.png", "stimuli/balmain-2.png", "stimuli/bottega-1.png", "stimuli/bottega-2.png", 
+                "stimuli/burberry-1.png", "stimuli/burberry-2.png", "stimuli/carolina-herrera-1.png", 
+                "stimuli/carolina-herrera-2.png", "stimuli/chanel-1.png", "stimuli/chanel-2.png", "stimuli/chloe-1.png", 
+                "stimuli/chloe-2.png", "stimuli/christian-dior-1.png", "stimuli/christian-dior-2.png", "stimuli/coach-1.png",
+                "stimuli/coach-2.png", "stimuli/diesel-1.png", "stimuli/diesel-2.png", "stimuli/dolce-gabbana-1.png", 
+                "stimuli/dolce-gabbana-2.png", "stimuli/dsquared-1.png", "stimuli/dsquared-2.png", "stimuli/elie-saab-1.png",
+                "stimuli/elie-saab-2.png", "stimuli/emporio-armani-1.png", "stimuli/emporio-armani-2.png", "stimuli/etro-1.png",
+                "stimuli/etro-2.png", "stimuli/fendi-1.png", "stimuli/fendi-2.png", "stimuli/giambattista-valli-1.png", 
+                "stimuli/giambattista-valli-2.png", "stimuli/giorgio-armani-1.png", "stimuli/giorgio-armani-2.png", 
+                "stimuli/givenchy-1.png", "stimuli/givenchy-2.png", "stimuli/hermes-1.png", "stimuli/hermes-2.png", 
+                "stimuli/isabel-marant-1.png", "stimuli/isabel-marant-2.png", "stimuli/kenzo-1.png", "stimuli/kenzo-2.png",
+                "stimuli/loewe-1.png", "stimuli/loewe-2.png", "stimuli/louis-vuitton-1.png", "stimuli/louis-vuitton-2.png",
+                "stimuli/maison-martin-margiela-1.png", "stimuli/maison-martin-margiela-2.png", "stimuli/marni-1.png", 
+                "stimuli/marni-2.png", "stimuli/max-mara-1.png", "stimuli/max-mara-2.png", "stimuli/mcqueen-1.png", 
+                "stimuli/mcqueen-2.png", "stimuli/michael-kors-1.png", "stimuli/michael-kors-2.png", "stimuli/miu-miu-1.png",
+                "stimuli/miu-miu-2.png", "stimuli/moschino-1.png", "stimuli/moschino-2.png", "stimuli/mugler-1.png", 
+                "stimuli/mugler-2.png", "stimuli/prada-1.png", "stimuli/prada-2.png", "stimuli/ralph-lauren-1.png", 
+                "stimuli/ralph-lauren-2.png", "stimuli/rick-owens-1.png", "stimuli/rick-owens-2.png", "stimuli/roberto-cavalli-1.png",
+                "stimuli/roberto-cavalli-2.png", "stimuli/saint-laurent-1.png", "stimuli/saint-laurent-2.png", 
+                "stimuli/salvatore-ferragamo-1.png", "stimuli/salvatore-ferragamo-2.png", "stimuli/schiaparelli-1.png",
+                "stimuli/schiaparelli-2.png", "stimuli/stella-mccartney-1.png", "stimuli/stella-mccartney-2.png",
+                "stimuli/tods-1.png", "stimuli/tods-2.png", "stimuli/tom-ford-1.png", "stimuli/tom-ford-2.png", 
+                "stimuli/tory-burch-1.png", "stimuli/tory-burch-2.png", "stimuli/valentino-1.png", "stimuli/valentino-2.png",
+                "stimuli/versace-1.png", "stimuli/versace-2.png", "stimuli/victoria-beckham-1.png", "stimuli/victoria-beckham-2.png",
+                "stimuli/zimmermann-1.png", "stimuli/zimmermann-2.png"
+            ]
+        }
+
+        var test_stimuli = ["test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png", "test/img7.png", "test/img8.png"]
+
+
+        var spatial_arrangement = {
+            type: jsPsychFreeSort,
+            stimuli: test_stimuli,
+            stim_width: 161.25,
+            stim_height: 400,
+            scale_factor: 1.3,
+            stim_starts_inside: true,
+            sort_area_width:window.innerWidth,
+            sort_area_height:window.innerHeight,
+            sort_area_shape: "square",
+        }
+
+        timeline.push(preload);
+        timeline.push({
+            type: jsPsychFullscreen,
+            fullscreen_mode: true
+        });
+        timeline.push(welcome_page);
+        timeline.push(instruction);
+        timeline.push(spatial_arrangement);
+
+
+
+        jsPsych.run(timeline);
+    </script>
+</html>
