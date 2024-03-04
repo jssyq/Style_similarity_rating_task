@@ -7,15 +7,22 @@
         <script src="https://unpkg.com/jspsych@7.3.4"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-free-sort@1.0.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
         <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link
+        rel="stylesheet"
+        href="https://unpkg.com/@jspsych/plugin-survey@0.2.2/css/survey.css"
+        type="text/css" />
+        <link href="styles.css" rel="stylesheet" type="text/css" />
     </head>
 
     <body></body>
 
     <script>
+
         var jsPsych = initJsPsych({
             on_finish: function () {
 				jsPsych.data.displayData();
@@ -27,7 +34,7 @@
         var welcome_page = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus:`
-            <p>Welcome and thank you for participating in this study!</p>
+            <h2>Welcome and thank you for participating in this study!</h2>
             <p></p>
             <p>Press any key to continue.</p>
             `
@@ -37,90 +44,278 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `
             <p>In this study, you will be asked to compare the styles of some outfits from the Spring/Summer 2024 Runway Shows.</p>
-            <p>Namely, how similar or how dissimilar they are to you.</p>
+            <p>Namely, how <strong>similar</strong> or how <strong>dissimilar</strong> they are to you.</p>
             <p></p>
             <p>All of the outfits are womenswear, coming from a variety of brands.</p>
             <p></p>
-            <p>Before we start, let's answer some background questions. Press any key to continue.</p>
+            <p>If you think they are <strong>similar</strong> in styles, put them <strong>close</strong> to each other.</p>
+            <p>If you think they are <strong>dissimilar</strong> in styles, put them <strong>apart</strong> from each other.</p>
+            <br>
+            <p>Press any key to continue.</p>
+            `
+        }
+
+        var explanation = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus:
+            `
+            <p>In each trial, you will have a rectangular space to arrange 10 outfits.</p>
+            <br>
+            <p>Upon the start of a trial, all outfits will appear within the space.<p>
+            <p>Move them around according to their similarities in styles and finish until you are satisfied with the arrangement.</p>
+            <br>
+            <p>For outfits that you think are completely the same in style, put them on top of each other to indicate that.</p> 
+            <p>The more different they are, the more far away they should be from each other.</p>
+            <br>
+            <p><strong>There is no right or wrong in this task.</strong></p>
+            <p>Press any key to start 2 practice trials.</p>
             `
         }
 
         var background_questions = {
-            type: jsPsychSurveyLikert,
-            questions:[
-                {
-                    prompt: "Is your career related to fashion?",
-                    required: true,
-                    name: 'bg_question_1',
-                    labels: ["yes", "no"]
-                },
-                {
-                    prompt: "How often do you follow developments in women's fashion? ",
-                    required: true,
-                    name: 'bg_question_2', 
-                    labels: [
-                        "Rarely or Never", "Occasionally", "Sometimes", "Often", "Always"
-                    ]
-                },
-                {
-                    prompt: "Do you actively try to style yourself when it comes to your personal fashion choices?",
-                    required: true,
-                    names: 'bg_questions_3',
-                    labels:[
-                        "Never", "Rarely", "Sometimes", "Often", "Always"
-                    ]
-                }
-            ]
-        }
+    type: jsPsychSurvey,
+    pages: [
+        [
+            {
+                type: 'likert',
+                prompt: 'Is your career related to fashion?',
+                required: true,
+                name: 'fashion_career',
+                likert_scale_values: [
+							{value: "very related"},
+							{value: "somewhat related"},
+							{value: "not related"}
+						],
+            }
+        ],
+        [
+            {
+                type: 'likert',
+                prompt: "How often do you follow developments in women's fashion?",
+                required: true,
+                name: 'fashion_engagement', 
+                likert_scale_values: [
+							{value: "Rarely or Never"},
+							{value: "Occasionally"},
+							{value: "Sometimes"},
+							{value: "Often"},
+							{value: "Always"}
+            ],
+            }
+        ],
+        [
+            {
+                type: 'likert',
+                prompt: 'Do you actively try to style yourself when it comes to your personal fashion choices?',
+                required: true,
+                name: 'attention_to_style',
+                likert_scale_values: [
+							{value: "Rarely or Never"},
+							{value: "Occasionally"},
+							{value: "Sometimes"},
+							{value: "Often"},
+							{value: "Always"}
+            ],
+            }
+        ],
+        [
+            {
+                type: 'likert',
+                prompt: 'Did you recognize any brands of the outfits you just saw?',
+                required: true,
+                name: 'style_recognized',
+                likert_scale_values: [
+							{value: "None"},
+							{value: "A few"},
+							{value: "Some of them"},
+							{value: "Most of them"},
+							{value: "All of them"}
+            ],
+            }
+        ]
+    ]
+};
+
 
         var preload = {
             type: jsPsychPreload,
             images: [
                 "test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png",
-                "test/img7.png", "test/img8.png",
-                "stimuli/acne-1.png", "stimuli/acne-2.png", "stimuli/alberta-1.png", "stimuli/alberta-2.png",
-                "stimuli/balmain-1.png", "stimuli/balmain-2.png", "stimuli/bottega-1.png", "stimuli/bottega-2.png", 
-                "stimuli/burberry-1.png", "stimuli/burberry-2.png", "stimuli/carolina-herrera-1.png", 
-                "stimuli/carolina-herrera-2.png", "stimuli/chanel-1.png", "stimuli/chanel-2.png", "stimuli/chloe-1.png", 
-                "stimuli/chloe-2.png", "stimuli/christian-dior-1.png", "stimuli/christian-dior-2.png", "stimuli/coach-1.png",
-                "stimuli/coach-2.png", "stimuli/diesel-1.png", "stimuli/diesel-2.png", "stimuli/dolce-gabbana-1.png", 
-                "stimuli/dolce-gabbana-2.png", "stimuli/dsquared-1.png", "stimuli/dsquared-2.png", "stimuli/elie-saab-1.png",
-                "stimuli/elie-saab-2.png", "stimuli/emporio-armani-1.png", "stimuli/emporio-armani-2.png", "stimuli/etro-1.png",
-                "stimuli/etro-2.png", "stimuli/fendi-1.png", "stimuli/fendi-2.png", "stimuli/giambattista-valli-1.png", 
-                "stimuli/giambattista-valli-2.png", "stimuli/giorgio-armani-1.png", "stimuli/giorgio-armani-2.png", 
-                "stimuli/givenchy-1.png", "stimuli/givenchy-2.png", "stimuli/hermes-1.png", "stimuli/hermes-2.png", 
-                "stimuli/isabel-marant-1.png", "stimuli/isabel-marant-2.png", "stimuli/kenzo-1.png", "stimuli/kenzo-2.png",
-                "stimuli/loewe-1.png", "stimuli/loewe-2.png", "stimuli/louis-vuitton-1.png", "stimuli/louis-vuitton-2.png",
-                "stimuli/maison-martin-margiela-1.png", "stimuli/maison-martin-margiela-2.png", "stimuli/marni-1.png", 
-                "stimuli/marni-2.png", "stimuli/max-mara-1.png", "stimuli/max-mara-2.png", "stimuli/mcqueen-1.png", 
-                "stimuli/mcqueen-2.png", "stimuli/michael-kors-1.png", "stimuli/michael-kors-2.png", "stimuli/miu-miu-1.png",
-                "stimuli/miu-miu-2.png", "stimuli/moschino-1.png", "stimuli/moschino-2.png", "stimuli/mugler-1.png", 
-                "stimuli/mugler-2.png", "stimuli/prada-1.png", "stimuli/prada-2.png", "stimuli/ralph-lauren-1.png", 
-                "stimuli/ralph-lauren-2.png", "stimuli/rick-owens-1.png", "stimuli/rick-owens-2.png", "stimuli/roberto-cavalli-1.png",
-                "stimuli/roberto-cavalli-2.png", "stimuli/saint-laurent-1.png", "stimuli/saint-laurent-2.png", 
-                "stimuli/salvatore-ferragamo-1.png", "stimuli/salvatore-ferragamo-2.png", "stimuli/schiaparelli-1.png",
-                "stimuli/schiaparelli-2.png", "stimuli/stella-mccartney-1.png", "stimuli/stella-mccartney-2.png",
-                "stimuli/tods-1.png", "stimuli/tods-2.png", "stimuli/tom-ford-1.png", "stimuli/tom-ford-2.png", 
-                "stimuli/tory-burch-1.png", "stimuli/tory-burch-2.png", "stimuli/valentino-1.png", "stimuli/valentino-2.png",
-                "stimuli/versace-1.png", "stimuli/versace-2.png", "stimuli/victoria-beckham-1.png", "stimuli/victoria-beckham-2.png",
-                "stimuli/zimmermann-1.png", "stimuli/zimmermann-2.png"
+                "test/img7.png", "test/img8.png", "test/img9.png", "test/img10.png", "test/img11.png", "test/img12.png", 
+                "test/img13.png", "test/img14.png", "test/img15.png", "test/img16.png", "test/img17.png", "test/img18.png",
+                "test/img19.png", "test/img20.png",
+                "stimuli/acne.png", "stimuli/alberta.png", "stimuli/3-1-phillip-lim.png", "stimuli/alessandra-rich.png",
+                "stimuli/balmain.png", "stimuli/altuzarra.png", "stimuli/bottega.png", "stimuli/ann-demeulemeester.png", 
+                "stimuli/burberry.png", "stimuli/attico.png", "stimuli/carolina-herrera.png", "stimuli/bally.png",
+                "stimuli/blumarine.png", "stimuli/chanel.png", "stimuli/brandon-maxwell.png", "stimuli/chloe.png", 
+                "stimuli/bronx-and-banco.png", "stimuli/christian-dior.png", "stimuli/carven.png", "stimuli/coach.png",
+                "stimuli/casablanca.png", "stimuli/diesel.png", "stimuli/cecilie-bahnsen.png", "stimuli/dolce-gabbana.png", 
+                "stimuli/coperni.png", "stimuli/dsquared.png", "stimuli/courreges.png", "stimuli/elie-saab.png",
+                "stimuli/david-koma.png", "stimuli/emporio-armani.png", "stimuli/dion-lee.png", "stimuli/etro.png",
+                "stimuli/dries-van-noten.png", "stimuli/fendi.png", "stimuli/erdem.png", "stimuli/giambattista-valli.png", 
+                "stimuli/ermanno-scervino.png", "stimuli/giorgio-armani.png", "stimuli/ferrari.png", "stimuli/gcds.png",
+                "stimuli/givenchy.png", "stimuli/gabriela-hearst.png", "stimuli/hermes.png", "stimuli/heliot-emil.png", 
+                "stimuli/isabel-marant.png", "stimuli/j-w-anderson.png", "stimuli/kenzo.png", "stimuli/sandy-liang.png",
+                "stimuli/loewe.png", "stimuli/laquan-smith.png", "stimuli/louis-vuitton.png", "stimuli/loveshackfancy.png",
+                "stimuli/maison-martin-margiela.png", "stimuli/missoni.png", "stimuli/marni.png", "stimuli/mm6.png",
+                "stimuli/msgm.png", "stimuli/max-mara.png", "stimuli/naeem-khan.png", "stimuli/mcqueen.png", 
+                "stimuli/nina-ricci.png", "stimuli/michael-kors.png", "stimuli/no-21.png", "stimuli/miu-miu.png",
+                "stimuli/paco-rabanne.png", "stimuli/moschino.png", "stimuli/peter-do.png", "stimuli/mugler.png", 
+                "stimuli/philipp-plein.png", "stimuli/prada.png", "stimuli/philosophy.png", "stimuli/ralph-lauren.png", 
+                "stimuli/prabal-gurung.png", "stimuli/rick-owens.png", "stimuli/proenza-schouler.png", "stimuli/roberto-cavalli.png",
+                "stimuli/rachel-comey.png", "stimuli/saint-laurent.png", "stimuli/sacai.png", "stimuli/simone-rocha.png",
+                "stimuli/salvatore-ferragamo.png", "stimuli/staud.png", "stimuli/schiaparelli.png", "stimuli/theory.png",
+                "stimuli/tibi.png", "stimuli/stella-mccartney.png", "stimuli/ulla-johnson.png", "stimuli/undercover.png",
+                "stimuli/tods.png", "stimuli/y-project.png", "stimuli/tom-ford.png", "stimuli/yohji-yamamoto.png", 
+                "stimuli/tory-burch.png", "stimuli/valentino.png", "stimuli/versace.png", "stimuli/victoria-beckham.png", 
+                "stimuli/zimmermann.png"
             ]
         }
 
-        var test_stimuli = ["test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png", "test/img7.png", "test/img8.png"]
+        var test_stimuli_1 = ["test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png", "test/img7.png", "test/img8.png", "test/img9.png", "test/img10.png"]
+        var test_stimuli_2 = ["test/img11.png", "test/img12.png", "test/img13.png", "test/img14.png", "test/img15.png", "test/img16.png", "test/img17.png", "test/img18.png", "test/img19.png", "test/img20.png"]
+        
+        
+        var imgs = [
+            "stimuli/acne.png", "stimuli/alberta.png", "stimuli/3-1-phillip-lim.png", "stimuli/alessandra-rich.png",
+            "stimuli/balmain.png", "stimuli/altuzarra.png", "stimuli/bottega.png", "stimuli/ann-demeulemeester.png", 
+            "stimuli/burberry.png", "stimuli/attico.png", "stimuli/carolina-herrera.png", "stimuli/bally.png",
+            "stimuli/blumarine.png", "stimuli/chanel.png", "stimuli/brandon-maxwell.png", "stimuli/chloe.png", 
+            "stimuli/bronx-and-banco.png", "stimuli/christian-dior.png", "stimuli/carven.png", "stimuli/coach.png",
+            "stimuli/casablanca.png", "stimuli/diesel.png", "stimuli/cecilie-bahnsen.png", "stimuli/dolce-gabbana.png", 
+            "stimuli/coperni.png", "stimuli/dsquared.png", "stimuli/courreges.png", "stimuli/elie-saab.png",
+            "stimuli/david-koma.png", "stimuli/emporio-armani.png", "stimuli/dion-lee.png", "stimuli/etro.png",
+            "stimuli/dries-van-noten.png", "stimuli/fendi.png", "stimuli/erdem.png", "stimuli/giambattista-valli.png", 
+            "stimuli/ermanno-scervino.png", "stimuli/giorgio-armani.png", "stimuli/ferrari.png", "stimuli/gcds.png",
+            "stimuli/givenchy.png", "stimuli/gabriela-hearst.png", "stimuli/hermes.png", "stimuli/heliot-emil.png", 
+            "stimuli/isabel-marant.png", "stimuli/j-w-anderson.png", "stimuli/kenzo.png", "stimuli/sandy-liang.png",
+            "stimuli/loewe.png", "stimuli/laquan-smith.png", "stimuli/louis-vuitton.png", "stimuli/loveshackfancy.png",
+            "stimuli/maison-martin-margiela.png", "stimuli/missoni.png", "stimuli/marni.png", "stimuli/mm6.png",
+            "stimuli/msgm.png", "stimuli/max-mara.png", "stimuli/naeem-khan.png", "stimuli/mcqueen.png", 
+            "stimuli/nina-ricci.png", "stimuli/michael-kors.png", "stimuli/no-21.png", "stimuli/miu-miu.png",
+            "stimuli/paco-rabanne.png", "stimuli/moschino.png", "stimuli/peter-do.png", "stimuli/mugler.png", 
+            "stimuli/philipp-plein.png", "stimuli/prada.png", "stimuli/philosophy.png", "stimuli/ralph-lauren.png", 
+            "stimuli/prabal-gurung.png", "stimuli/rick-owens.png", "stimuli/proenza-schouler.png", "stimuli/roberto-cavalli.png",
+            "stimuli/rachel-comey.png", "stimuli/saint-laurent.png", "stimuli/sacai.png", "stimuli/simone-rocha.png",
+            "stimuli/salvatore-ferragamo.png", "stimuli/staud.png", "stimuli/schiaparelli.png", "stimuli/theory.png",
+            "stimuli/tibi.png", "stimuli/stella-mccartney.png", "stimuli/ulla-johnson.png", "stimuli/undercover.png",
+            "stimuli/tods.png", "stimuli/y-project.png", "stimuli/tom-ford.png", "stimuli/yohji-yamamoto.png", 
+            "stimuli/tory-burch.png", "stimuli/valentino.png", "stimuli/versace.png", "stimuli/victoria-beckham.png", 
+            "stimuli/zimmermann.png"
+        ]
 
-
-        var spatial_arrangement = {
-            type: jsPsychFreeSort,
-            stimuli: test_stimuli,
-            stim_width: 161.25,
-            stim_height: 400,
-            scale_factor: 1.3,
-            stim_starts_inside: true,
-            sort_area_width:window.innerWidth,
-            sort_area_height:window.innerHeight,
-            sort_area_shape: "square",
+        var practice_trials = {
+            timeline: [
+                {
+                    type: jsPsychFreeSort,
+                    stimuli: jsPsych.timelineVariable('stimuli'),
+                    stim_width: innerWidth*0.14,
+                    stim_height: innerHeight*0.6,
+                    scale_factor: 1.3,
+                    stim_starts_inside: true,
+                    sort_area_width: function(){
+                        return window.innerWidth*0.95;
+                    },
+                    sort_area_height: function(){
+                        return window.innerHeight*0.95;
+                    },
+                    sort_area_shape: "square",
+                    counter_text_finished: "All items placed. Feel free to rearrange items if necessary.",
+                    counter_text_unfinished: "You still need to place %n% item%s% inside the space.",
+                    data: {
+                        task: "practice"
+                    }
+                }
+            ],
+            timeline_variables: [
+                {stimuli: test_stimuli_1},
+                {stimuli: test_stimuli_2}
+            ]
         }
+
+
+        var real_trial_start = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `<h3>Good job on finishing the practice trials.</p><p>When you are ready, press continue to start the experiment.</h3>`,
+            choices: ["Continue"]
+        }
+
+        var stimuli_set = new Array();
+
+        while(stimuli_set.length < 10){
+            imgs_set = new Array();
+            imgs_copy = [...imgs];
+            imgs_shuffled = imgs_copy.sort(() => Math.random() - 0.5);
+            for(let i=0; i<10; i++){
+                imgs_set.push(imgs_shuffled[i]);
+            }
+            stimuli_set.push(imgs_set);
+        }
+
+        var real_trials = {
+            timeline: [
+                {
+                    type: jsPsychFreeSort,
+                    stimuli: jsPsych.timelineVariable('imgs'),
+                    stim_width: innerWidth*0.14,
+                    stim_height: innerHeight*0.6,
+                    scale_factor: 1.3,
+                    stim_starts_inside: true,
+                    sort_area_width: function(){
+                        return window.innerWidth*0.95;
+                    },
+                    sort_area_height: function(){
+                        return window.innerHeight*0.95;
+                    },
+                    sort_area_shape: "square",
+                    counter_text_finished: "All items placed. Feel free to rearrange items if necessary.",
+                    counter_text_unfinished: "You still need to place %n% item%s% inside the space.",
+                    data: {
+                        task: "rating_trial"
+                    }
+                }
+            ],
+            timeline_variables: [
+                {imgs: stimuli_set[0]},
+                {imgs: stimuli_set[1]},
+                {imgs: stimuli_set[2]},
+                {imgs: stimuli_set[3]},
+                {imgs: stimuli_set[4]},
+                {imgs: stimuli_set[5]},
+                {imgs: stimuli_set[6]},
+                {imgs: stimuli_set[7]},
+                {imgs: stimuli_set[8]},
+                {imgs: stimuli_set[9]},
+            ]
+        }
+
+        var end = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+            <h2>This is the end of the experiment.</h2>
+            <br>
+            <p>Thank you so much for participating! Before you go, there are some simple questions for you to answer.</p>
+            <p>Press any key to continue</p>
+            `
+        }
+
+        var goodbye = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+            <h2> Thank you again for participating and have a nice day! ;)</h2>
+            <p>Press any key to quit</p>
+            `
+        }
+
+
+
+        // each trial randomly choose 10 out of 100, 10 trials per participant
+        // each trial generates 45 judgements and 10 trials 450
+        // each trial 1min, 10 trials being 10min, plus other trials 15min in total
+        // each participant should be paid around 3 dollars
+        // 150 participants require 450 dollars
+        // 150 participants generate 150 *450 judgements
+        // randomly choose 10 out of 100 trials, how many trials do i need so that it is possible to cover all possible pair-wise ratings?
 
         timeline.push(preload);
         timeline.push({
@@ -129,7 +324,15 @@
         });
         timeline.push(welcome_page);
         timeline.push(instruction);
-        timeline.push(spatial_arrangement);
+        timeline.push(explanation); 
+        timeline.push(practice_trials);
+        timeline.push(real_trial_start);
+        timeline.push(real_trials);
+        timeline.push(end);
+        timeline.push(background_questions);
+        timeline.push(goodbye);
+        
+       
 
 
 
