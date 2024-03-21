@@ -29,6 +29,17 @@
 			},
         });
 
+        var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
+        var study_id = jsPsych.data.getURLVariable('STUDY_ID');
+        var session_id = jsPsych.data.getURLVariable('SESSION_ID');
+
+        jsPsych.data.addProperties({
+            subject_id: subject_id,
+            study_id: study_id,
+            session_id: session_id
+        });
+
+
         var timeline = [];
 
         var welcome_page = {
@@ -43,14 +54,17 @@
         var instruction = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `
-            <p>In this study, you will be asked to compare the styles of some outfits from the Spring/Summer 2024 Runway Shows.</p>
-            <p>Namely, how <strong>similar</strong> or how <strong>dissimilar</strong> they are to you.</p>
+            <p>In this study, you will be asked to compare some outfits from the Spring/Summer 2024 Runway Shows.</p>
+            <p>Namely, how <strong>similar</strong> or how <strong>dissimilar</strong> they are <strong>in terms of style</strong> to you.</p>
             <p></p>
             <p>All of the outfits are womenswear, coming from a variety of brands.</p>
             <p></p>
             <p>If you think they are <strong>similar</strong> in styles, put them <strong>close</strong> to each other.</p>
             <p>If you think they are <strong>dissimilar</strong> in styles, put them <strong>apart</strong> from each other.</p>
-            <br>
+            <p> See demonstration below: </p>
+            <video width="400", height="355" controls autoplay loop>
+                <source src="demonstration.mov">
+                </video>
             <p>Press any key to continue.</p>
             `
         }
@@ -59,21 +73,22 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus:
             `
-            <p>In each trial, you will have a rectangular space to arrange 10 outfits.</p>
+            <p>Now you will get some practices before the actual trial.</p>
             <br>
-            <p>Upon the start of a trial, all outfits will appear within the space.<p>
-            <p>Move them around according to their similarities in styles and finish until you are satisfied with the arrangement.</p>
+            <p>Upon the start of a trial, 5 outfits will appear within the space.<p>
+            <p>Move them around according to their similarities <strong>in styles</strong> and finish until you are satisfied with the arrangement.</p>
             <br>
-            <p>For outfits that you think are completely the same in style, put them on top of each other to indicate that.</p> 
-            <p>The more different they are, the more far away they should be from each other.</p>
-            <br>
-            <p><strong>There is no right or wrong in this task.</strong></p>
-            <p>Press any key to start 2 practice trials.</p>
+            <p><strong>There is no right or wrong answer in this task.</strong></p>
+            <p>Press any key to start the practice trials.</p>
             `
         }
 
         var background_questions = {
-    type: jsPsychSurvey,
+            type: jsPsychSurvey,
+            on_load: () => {
+                var svContainer = document.querySelector('.sv_container');
+                svContainer.style.color = 'rgb(0, 0, 0)';
+            },
     pages: [
         [
             {
@@ -88,6 +103,7 @@
 						],
             }
         ],
+        
         [
             {
                 type: 'likert',
@@ -95,11 +111,11 @@
                 required: true,
                 name: 'fashion_engagement', 
                 likert_scale_values: [
-							{value: "Rarely or Never"},
-							{value: "Occasionally"},
-							{value: "Sometimes"},
-							{value: "Often"},
-							{value: "Always"}
+							{value: "Always"},
+                            {value: "Often"},
+                            {value: "Sometimes"},
+                            {value: "Occasionally"},
+                            {value: "Rarely or Never"}	
             ],
             }
         ],
@@ -110,11 +126,11 @@
                 required: true,
                 name: 'attention_to_style',
                 likert_scale_values: [
-							{value: "Rarely or Never"},
-							{value: "Occasionally"},
-							{value: "Sometimes"},
-							{value: "Often"},
-							{value: "Always"}
+                    {value: "Always"},
+                            {value: "Often"},
+                            {value: "Sometimes"},
+                            {value: "Occasionally"},
+                            {value: "Rarely or Never"}	
             ],
             }
         ],
@@ -125,11 +141,11 @@
                 required: true,
                 name: 'style_recognized',
                 likert_scale_values: [
-							{value: "None"},
-							{value: "A few"},
-							{value: "Some of them"},
+							{value: "All of them"},
 							{value: "Most of them"},
-							{value: "All of them"}
+							{value: "Some of them"},
+							{value: "A few"},
+							{value: "None"}
             ],
             }
         ]
@@ -140,10 +156,7 @@
         var preload = {
             type: jsPsychPreload,
             images: [
-                "test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png",
-                "test/img7.png", "test/img8.png", "test/img9.png", "test/img10.png", "test/img11.png", "test/img12.png", 
-                "test/img13.png", "test/img14.png", "test/img15.png", "test/img16.png", "test/img17.png", "test/img18.png",
-                "test/img19.png", "test/img20.png",
+                "test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png","test/img5.png",
                 "stimuli/acne.png", "stimuli/alberta.png", "stimuli/3-1-phillip-lim.png", "stimuli/alessandra-rich.png",
                 "stimuli/balmain.png", "stimuli/altuzarra.png", "stimuli/bottega.png", "stimuli/ann-demeulemeester.png", 
                 "stimuli/burberry.png", "stimuli/attico.png", "stimuli/carolina-herrera.png", "stimuli/bally.png",
@@ -172,9 +185,7 @@
             ]
         }
 
-        var test_stimuli_1 = ["test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png", "test/img6.png", "test/img7.png", "test/img8.png", "test/img9.png", "test/img10.png"]
-        var test_stimuli_2 = ["test/img11.png", "test/img12.png", "test/img13.png", "test/img14.png", "test/img15.png", "test/img16.png", "test/img17.png", "test/img18.png", "test/img19.png", "test/img20.png"]
-        
+        var test_stimuli = ["test/img1.png", "test/img2.png", "test/img3.png", "test/img4.png", "test/img5.png"]
         
         var imgs = [
             "stimuli/acne.png", "stimuli/alberta.png", "stimuli/3-1-phillip-lim.png", "stimuli/alessandra-rich.png",
@@ -205,97 +216,78 @@
         ]
 
         var practice_trials = {
-            timeline: [
-                {
                     type: jsPsychFreeSort,
-                    stimuli: jsPsych.timelineVariable('stimuli'),
-                    stim_width: innerWidth*0.14,
-                    stim_height: innerHeight*0.6,
-                    scale_factor: 1.3,
+                    stimuli: test_stimuli,
+                    stim_width: function(){
+                        return window.innerWidth*0.08
+                    },
+                    stim_height: function(){
+                        return window.innerHeight*0.3
+                    },
+                    scale_factor: 1.5,
                     stim_starts_inside: true,
                     sort_area_width: function(){
-                        return window.innerWidth*0.95;
+                        return window.innerWidth*0.9;
                     },
                     sort_area_height: function(){
-                        return window.innerHeight*0.95;
+                        return window.innerHeight*0.9;
                     },
                     sort_area_shape: "square",
-                    counter_text_finished: "All items placed. Feel free to rearrange items if necessary.",
+                    counter_text_finished: "All outfits placed. Feel free to rearrange them. When you finish, scroll down to click continue.",
                     counter_text_unfinished: "You still need to place %n% item%s% inside the space.",
                     data: {
                         task: "practice"
                     }
-                }
-            ],
-            timeline_variables: [
-                {stimuli: test_stimuli_1},
-                {stimuli: test_stimuli_2}
-            ]
         }
 
 
         var real_trial_start = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: `<h3>Good job on finishing the practice trials.</p><p>When you are ready, press continue to start the experiment.</h3>`,
+            stimulus: `<p>Good job on finishing the practice trials.</p><p>When you are ready, press continue to start the experiment.</p>
+                <p>There will only be <strong>1 trial</strong> that consists of <strong>25</strong> outfits. </p>`,
             choices: ["Continue"]
         }
 
         var stimuli_set = new Array();
 
-        while(stimuli_set.length < 10){
-            imgs_set = new Array();
-            imgs_copy = [...imgs];
-            imgs_shuffled = imgs_copy.sort(() => Math.random() - 0.5);
-            for(let i=0; i<10; i++){
-                imgs_set.push(imgs_shuffled[i]);
+            imgs_shuffled = imgs.sort(() => Math.random() - 0.5);
+            for(let i=0; i<25; i++){
+                stimuli_set.push(imgs_shuffled[i]);
             }
-            stimuli_set.push(imgs_set);
-        }
 
         var real_trials = {
-            timeline: [
-                {
                     type: jsPsychFreeSort,
-                    stimuli: jsPsych.timelineVariable('imgs'),
-                    stim_width: innerWidth*0.14,
-                    stim_height: innerHeight*0.6,
-                    scale_factor: 1.3,
+                    stimuli: stimuli_set,
+                    stim_width: function(){
+                        return window.innerWidth*0.08
+                    },
+                    stim_height: function(){
+                        return window.innerHeight*0.3
+                    },
+                    scale_factor: 2,
                     stim_starts_inside: true,
                     sort_area_width: function(){
-                        return window.innerWidth*0.95;
+                        return window.innerWidth*0.9;
                     },
                     sort_area_height: function(){
-                        return window.innerHeight*0.95;
+                        return window.innerHeight*0.9;
                     },
                     sort_area_shape: "square",
-                    counter_text_finished: "All items placed. Feel free to rearrange items if necessary.",
+                    counter_text_finished: "All outfits placed. Feel free to rearrange them. When you finish, scroll down to click continue.",
                     counter_text_unfinished: "You still need to place %n% item%s% inside the space.",
                     data: {
                         task: "rating_trial"
                     }
                 }
-            ],
-            timeline_variables: [
-                {imgs: stimuli_set[0]},
-                {imgs: stimuli_set[1]},
-                {imgs: stimuli_set[2]},
-                {imgs: stimuli_set[3]},
-                {imgs: stimuli_set[4]},
-                {imgs: stimuli_set[5]},
-                {imgs: stimuli_set[6]},
-                {imgs: stimuli_set[7]},
-                {imgs: stimuli_set[8]},
-                {imgs: stimuli_set[9]},
-            ]
-        }
+
 
         var end = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `
             <h2>This is the end of the experiment.</h2>
             <br>
-            <p>Thank you so much for participating! Before you go, there are some simple questions for you to answer.</p>
-            <p>Press any key to continue</p>
+            <p>Before you go, there are some simple questions for you to answer.</p>
+            <p>Press any key to continue.</p>
             `
         }
 
