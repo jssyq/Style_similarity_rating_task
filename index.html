@@ -34,14 +34,17 @@
         var study_id = jsPsych.data.getURLVariable('STUDY_ID');
         var session_id = jsPsych.data.getURLVariable('SESSION_ID'); */
 
-        const filename = `${1}.csv`;
+
+        const subject_id = jsPsych.randomization.randomID(10);
+        const filename = `${subject_id}.csv`;
+            
             
 
-        jsPsych.data.addProperties({
+        /* jsPsych.data.addProperties({
             subject_id: subject_id,
             study_id: study_id,
             session_id: session_id
-        });
+        }); */
 
 
         var timeline = [];
