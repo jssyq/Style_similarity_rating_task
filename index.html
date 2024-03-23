@@ -25,26 +25,25 @@
     <script>
 
         var jsPsych = initJsPsych({
-            /* on_finish: function () {
+            on_finish: function () {
 				window.location = "https://app.prolific.com/submissions/complete?cc=C1JH1RU1"
-			}, */
+			}, 
         });
 
-/*         var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
+        var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
         var study_id = jsPsych.data.getURLVariable('STUDY_ID');
-        var session_id = jsPsych.data.getURLVariable('SESSION_ID'); */
+        var session_id = jsPsych.data.getURLVariable('SESSION_ID'); 
 
 
-        const subject_id = jsPsych.randomization.randomID(10);
         const filename = `${subject_id}.csv`;
             
             
 
-        /* jsPsych.data.addProperties({
+        jsPsych.data.addProperties({
             subject_id: subject_id,
             study_id: study_id,
             session_id: session_id
-        }); */
+        }); 
 
 
         var timeline = [];
