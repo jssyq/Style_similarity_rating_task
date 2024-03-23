@@ -25,16 +25,16 @@
     <script>
 
         var jsPsych = initJsPsych({
-            on_finish: function () {
+            /* on_finish: function () {
 				window.location = "https://app.prolific.com/submissions/complete?cc=C1JH1RU1"
-			},
+			}, */
         });
 
-        var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
+/*         var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
         var study_id = jsPsych.data.getURLVariable('STUDY_ID');
-        var session_id = jsPsych.data.getURLVariable('SESSION_ID');
+        var session_id = jsPsych.data.getURLVariable('SESSION_ID'); */
 
-        const filename = `${subject_id}.csv`;
+        const filename = `${1}.csv`;
             
 
         jsPsych.data.addProperties({
